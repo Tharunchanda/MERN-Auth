@@ -4,5 +4,6 @@
 @tailwind utilities;
 
 *{
+  
   font-family: "Outfit", sans-serif;
 }
