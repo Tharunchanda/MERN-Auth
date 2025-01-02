@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import userModel from '../models/userModel.js';
 import transporter from '../config/nodemailer.js';
 import { text } from 'express';
-
+import { EMAIL_VERIFY_TEMPLATE,PASSWORD_RESET_TEMPLATE } from '../config/emailTemplate.js';
 
 export const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -109,7 +109,8 @@ export const sendVerifyOtp = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Account Verification OTP',
-            text: `Hello ${user.name} \n Your OTP for account verification is ${otp}`,
+            //text: `Hello ${user.name} \n Your OTP for account verification is ${otp}`,
+            html: EMAIL_VERIFY_TEMPLATE.replace('{{email}}', user.email).replace('{{otp}}', otp),
         };
         await transporter.sendMail(mailOptions);
         return res.json({ success: true, message: 'Verification OTP sent successfully' });
@@ -171,7 +172,8 @@ export const SendResetOtp = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: email,
             subject: 'Password Reset Otp',
-            text:`Your otp for reseting password is ${otp}`
+            //text:`Your otp for reseting password is ${otp}`
+            html: PASSWORD_RESET_TEMPLATE.replace('{{email}}', email).replace('{{otp}}', otp),
         }
         await transporter.sendMail(mailOptions);
         return res.json({success:true,message:'Reset Otp sent successfully'})

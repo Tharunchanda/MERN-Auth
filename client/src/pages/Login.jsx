@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 const Login = () => {
 
   const navigate = useNavigate()
-  const {backendUrl, setIsLoggedIn} = useContext(AppContext)
+  const {backendUrl, setIsLoggedIn ,getUserData} = useContext(AppContext)
 
   const [state, setState] = React.useState('Sign Up')
   const [name, setName] = React.useState('')
@@ -29,6 +29,7 @@ const Login = () => {
       }
       if (data.success) {
         setIsLoggedIn(true);
+        getUserData();
         navigate('/');
       } else {
         toast.error(data.message);
@@ -60,7 +61,7 @@ const Login = () => {
             <img src={assets.lock_icon} alt="" />
             <input onChange ={e=>setPassword(e.target.value)} value={password} className='bg-transparent outline-none' type='password' placeholder='Password' required />
           </div>
-          <p className='mb-4 text-indigo-500 cursor-pointer'>Forgot Password?</p>
+          <p onClick={()=>navigate('/reset-password')} className='mb-4 text-indigo-500 cursor-pointer'>Forgot Password?</p>
           <button className='w-full py-2.5 rounded-full text-white font-medium bg-gradient-to-r from-indigo-500 to-indigo-900'>{state === 'Sign Up' ? 'Sign Up' : 'Login'}</button>
         </form >
         {state === 'Sign Up' ? (
