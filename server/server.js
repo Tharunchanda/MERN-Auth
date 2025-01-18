@@ -12,7 +12,7 @@ connectDB();
 
 // Allow all origins
 app.use(express.json());
-app.use(cors({ credentials: true })); // 'origin' omitted to allow all origins
+app.use(cors({ origin: '*', credentials: true }));
 app.use(cookieParser());
 
 // API Routes
