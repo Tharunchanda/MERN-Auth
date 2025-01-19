@@ -14,19 +14,18 @@ const allowedOrigins = ['http://localhost:5173', 'http://localhost:1000', 'https
 
 app.use(express.json());
 // app.use(cors({ origin: allowedOrigins, credentials: true }));/
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or CURL)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      return callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
-};
-
-app.use(cors(corsOptions));
+}));
 app.use(cookieParser());
 
 // API Routes
