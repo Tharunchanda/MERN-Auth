@@ -10,9 +10,23 @@ const app = express();
 const port = process.env.PORT || 1000;
 connectDB();
 
-// Allow all origins
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:1000', 'https://mern-authentication-app-z6ty.onrender.com/'];
+
 app.use(express.json());
-app.use(cors({ origin: '*', credentials: true }));
+// app.use(cors({ origin: allowedOrigins, credentials: true }));/
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // API Routes
